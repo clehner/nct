@@ -13,8 +13,20 @@ var client;
 var minExpires = 5000;
 var unlockTime = 300;
 
+function rpc(name, args, cb) {
+	client.cmd(name, args, function (err, result) {
+		if (err) {
+			if (err.code == "ECONNREFUSED") {
+				console.error("Unable to connect to namecoind");
+				process.exit(1);
+			}
+		}
+		cb(err, result);
+	});
+}
+
 function fetchName(name, cb) {
-	client.cmd("name_show", name, function (err, result) {
+	rpc("name_show", [name], function (err, result) {
 		if (err) return cb(err);
 		if (result.value) {
 			var value = result.value;
@@ -48,25 +60,23 @@ function unlockWallet(cb, errorMsg) {
 			return unlockWallet(cb);
 		}
 
-		client.cmd("walletpassphrase", pin, unlockTime,
-			function (err) {
-				if (err) {
-					if (err.code == -14) {
-						unlockWallet(cb,
-							"The wallet passphrase entered was incorrect");
-					} else {
-						cb(err);
-					}
+		rpc("walletpassphrase", [pin, unlockTime], function (err) {
+			if (err) {
+				if (err.code == -14) {
+					unlockWallet(cb,
+						"The wallet passphrase entered was incorrect");
 				} else {
-					cb(null);
+					cb(err);
 				}
+			} else {
+				cb(null);
 			}
-		);
+		});
 	});
 }
 
 function saveName(name, data, cb) {
-	client.cmd("name_update", name, data, function (err, result) {
+	rpc("name_update", [name, data], function (err, result) {
 		if (err) {
 			if (err.code == -13) {
 				unlockWallet(function (err) {
@@ -212,7 +222,7 @@ function updateNames(names, cb) {
 
 var commands = {
 	list: function() {
-		client.cmd("name_list", function (err, result) {
+		rpc("name_list", [], function (err, result) {
 			if (err) throw err;
 			console.log(result.map(function (data) {
 				return data.name + "\t" + data.address + "\t" +data.expires_in;
@@ -226,7 +236,7 @@ var commands = {
 			process.exit(1);
 		}
 
-		client.cmd("name_show", name, function (err, result) {
+		rpc("name_show", [name], function (err, result) {
 			if (err) throw err;
 			console.log(result);
 		});
@@ -285,7 +295,7 @@ var commands = {
 	},
 
 	"update-expiring": function () {
-		client.cmd("name_list", function (err, result) {
+		rpc("name_list", [], function (err, result) {
 			if (err) throw err;
 			var names = result.filter(function (data) {
 				return data.expires_in < minExpires;

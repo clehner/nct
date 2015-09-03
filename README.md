@@ -13,6 +13,9 @@
 Commands that require unlocking the wallet will prompt you to enter your
 passphrase using a pinentry program.
 
+Configuration for communicating with namecoind is read from
+`~/.namecoin/namecoin.conf`.
+
 ### Commands
 
 #### `list`
