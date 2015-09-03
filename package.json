@@ -18,6 +18,7 @@
   "dependencies": {
     "mktemp": "^0.4.0",
     "namecoin-rpc": "^2.1.2",
-    "node-ini": "^1.0.0"
+    "node-ini": "^1.0.0",
+    "pinentry": "^0.0.1"
   }
 }
