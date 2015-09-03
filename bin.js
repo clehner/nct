@@ -44,6 +44,10 @@ function unlockWallet(cb, errorMsg) {
 			}
 		}
 
+		if (!pin) {
+			return unlockWallet(cb);
+		}
+
 		client.cmd("walletpassphrase", pin, unlockTime,
 			function (err) {
 				if (err) {
