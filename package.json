@@ -16,6 +16,7 @@
     "url": "https://github.com/clehner/nct/issues"
   },
   "dependencies": {
+    "mktemp": "^0.4.0",
     "namecoin-rpc": "^2.1.2",
     "node-ini": "^1.0.0"
   }
