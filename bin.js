@@ -105,11 +105,8 @@ function saveJSON(name, path, data, cb) {
 
 function editName(name, path, data, asJSON, cb) {
 	openEditor(path, function (status) {
-		if (status !== 0) {
-			console.log("Aborting because of non-zero exit status");
-			process.exit(1);
-		}
-
+		if (status)
+			return cb("exit");
 		var data = fs.readFileSync(path, {encoding: "utf8"});
 		if (asJSON) {
 			saveJSON(name, path, data, cb);
@@ -232,8 +229,8 @@ var commands = {
 					throw err;
 				}
 			}
-			var template = "XXXXX-" + name.replace(/\//g, "-") +
-				(wasJSON ? ".json" : "");
+			var template = "/tmp/nct-" + name.replace(/\//g, "-") +
+				"-XXXXXXX" + (wasJSON ? ".json" : "");
 			var path = mktemp.createFileSync(template);
 			fs.writeFileSync(path, data);
 			editName(name, path, data, wasJSON, function (err, tx) {
@@ -243,6 +240,9 @@ var commands = {
 						console.log("Update canceled");
 					} else if (err == "passphrase") {
 						console.log("Passphrase entry canceled");
+					} else if (err == "exit") {
+						console.log("Aborting because of non-zero " +
+							"exit status");
 					} else {
 						throw err;
 					}
