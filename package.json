@@ -1,8 +1,8 @@
 {
-  "name": "nct",
+  "name": "namecointool",
   "version": "1.0.0",
   "description": "command-line Namecoin name manager",
-  "bin": "bin.js",
+  "bin": {"nct": "bin.js"},
   "repository": {
     "type": "git",
     "url": "git://github.com/clehner/nct"

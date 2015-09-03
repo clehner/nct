@@ -286,7 +286,7 @@ var commands = {
 var fn = commands[process.argv[2]];
 if (!fn) {
 	console.log([
-		"Usage: " + pkg.name + " <command> [arguments]",
+		"Usage: nct <command> [arguments]",
 		"Commands:",
 		"    list",
 		"    info <name>",
