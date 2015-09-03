@@ -280,6 +280,10 @@ var commands = {
 				}
 			});
 		});
+	},
+
+	"-v": function () {
+		console.log(pkg.version);
 	}
 };
 
