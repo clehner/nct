@@ -166,6 +166,19 @@ function promptYesNo(msg, cb) {
 	});
 }
 
+function updateNames(names, cb) {
+	if (names.length === 0) return;
+	var name = names.shift();
+	saveName(name.name, name.value, function (err, result) {
+		if (err == "passphrase") {
+			cb(err);
+		} else {
+			cb(err, name, result);
+			updateNames(names, cb);
+		}
+	});
+}
+
 var commands = {
 	list: function() {
 		client.cmd("name_list", function (err, result) {
@@ -223,9 +236,9 @@ var commands = {
 				fs.unlinkSync(path);
 				if (err) {
 					if (err == "cancel") {
-						console.log("Update canceled.");
+						console.log("Update canceled");
 					} else if (err == "passphrase") {
-						console.log("Passphrase entry canceled.");
+						console.log("Passphrase entry canceled");
 					} else {
 						throw err;
 					}
@@ -240,26 +253,27 @@ var commands = {
 	"update-expiring": function () {
 		client.cmd("name_list", function (err, result) {
 			if (err) throw err;
-			var batch = result.filter(function (data) {
+			var names = result.filter(function (data) {
 				return data.expires_in < minExpires;
-			}).map(function (data) {
-				return {
-					method: "name_update",
-					params: [data.name, data.value]
-				};
 			});
 
-			if (batch.length === 0) {
-				console.log("All names are up to date.");
+			if (names.length === 0) {
+				console.log("All names are up to date");
 				return;
 			}
 
-			console.log("Updating", batch.length, "names");
-			var i = 0;
-			client.cmd(batch, function(err, result) {
-				if (err) return console.log(err);
-				var name = batch[i++].params[0];
-				console.log(name, result);
+			console.log("Updating", names.length, "names");
+
+			updateNames(names, function (err, name, tx) {
+				if (err) {
+					if (err == "passphrase") {
+						console.log("Passphrase entry canceled");
+					} else {
+						console.log(name, err);
+					}
+				} else {
+					console.log(name + ": " + tx);
+				}
 			});
 		});
 	}
