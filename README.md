@@ -2,9 +2,16 @@
 
 **Namecoin tool** - a command line tool for managing Namecoin names
 
+## Installation
+
+    npm install -g nct
+
 ## Usage
 
-`nct <command> [arguments]`
+    nct <command> [arguments]
+
+Commands that require unlocking the wallet will prompt you to enter your
+passphrase using a pinentry program.
 
 ### Commands
 
@@ -24,12 +31,18 @@ Print the contents of a name. If the value is JSON, it is pretty-printed.
 
 Edit a name. Opens your $EDITOR and saves the result when the editor exits. If
 the value is JSON, it is pretty-printed for the editor and then printed
-compactly for sending the update. If the JSON data saved is invalid, you are
+compactly for issuing the update. If the JSON data saved is invalid, you are
 prompted to edit it again.
 
 #### `update-expiring`
 
-Update all names that are pending expiration.
+Update all names that are nearing expiration.
+
+## Todo
+
+- Support registering new names
+- Support transferring names
+- Add bash/zsh completions
 
 ## License
 

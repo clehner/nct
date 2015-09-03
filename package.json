@@ -1,6 +1,6 @@
 {
   "name": "nct",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "command-line Namecoin name manager",
   "bin": "bin.js",
   "repository": {
