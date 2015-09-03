@@ -152,7 +152,17 @@ function prompt(msg, cb) {
 		input: process.stdin,
 		output: process.stdout
 	});
+	var answered;
+
+	rl.on("close", function () {
+		if (!answered) {
+			process.stdout.write("\n");
+			return cb("cancel");
+		}
+	});
+
 	rl.question(msg + " ", function onAnswer(answer) {
+		answered = true;
 		if (cb(answer.toLowerCase()))
 			rl.close();
 		else
