@@ -1,4 +1,4 @@
-#!/usr/bin/env nodejs
+#!/usr/bin/env node
 
 var fs = require("fs");
 var namecoind = require("namecoin-rpc");
