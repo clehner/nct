@@ -103,11 +103,29 @@ function saveJSON(name, path, data, cb) {
 	saveName(name, data, cb);
 }
 
-function editName(name, path, data, asJSON, cb) {
+function editName(name, path, oldData, asJSON, cb) {
+	var data;
 	openEditor(path, function (status) {
 		if (status)
 			return cb("exit");
-		var data = fs.readFileSync(path, {encoding: "utf8"});
+		data = fs.readFileSync(path, {encoding: "utf8"});
+		if (data == oldData) {
+			promptReEdit("Data is unchanged", function (resp) {
+				switch (resp) {
+					case "edit":
+						return editName(name, path, data, asJSON, cb);
+					case "use":
+						return next();
+					case "cancel":
+						return cb("cancel", null);
+				}
+			});
+		} else {
+			next();
+		}
+	});
+
+	function next() {
 		if (asJSON) {
 			saveJSON(name, path, data, cb);
 		} else if (data[0] == "{" || data[1] == "[") {
@@ -120,7 +138,7 @@ function editName(name, path, data, asJSON, cb) {
 		} else {
 			saveName(name, data, cb);
 		}
-	});
+	}
 }
 
 function openEditor(filename, cb) {
@@ -146,6 +164,8 @@ function promptReEdit(msg, cb) {
 	msg = (msg ? msg + ". " : "") +
 		"[E]dit again, [u]se as-is, or [c]ancel?";
 	prompt(msg, function (answer) {
+		if (!answer)
+			return false;
 		for (var opt in {edit: 1, use: 1, cancel: 1}) {
 			if (answer.indexOf(opt) === 0 || opt.indexOf(answer) === 0) {
 				cb(opt);
