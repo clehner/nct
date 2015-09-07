@@ -9,6 +9,8 @@ var spawn = require("child_process").spawn;
 var mktemp = require("mktemp");
 var readline = require("readline");
 
+var binName = typeof pkg.bin == "object" ? Object.keys(pkg.bin)[0] : pkg.name;
+
 var client;
 var minExpires = 5000;
 var unlockTime = 300;
@@ -234,7 +236,7 @@ var commands = {
 
 	info: function (name) {
 		if (!name) {
-			console.error("Usage: " + pkg.name + " edit <name>");
+			console.error("Usage: " + binName + " edit <name>");
 			process.exit(1);
 		}
 
@@ -246,7 +248,7 @@ var commands = {
 
 	cat: function (name) {
 		if (!name) {
-			console.error("Usage: " + pkg.name + " edit <name>");
+			console.error("Usage: " + binName + " edit <name>");
 			process.exit(1);
 		}
 
@@ -258,7 +260,7 @@ var commands = {
 
 	edit: function (name) {
 		if (!name) {
-			console.error("Usage: " + pkg.name + " edit <name>");
+			console.error("Usage: " + binName + " edit <name>");
 			process.exit(1);
 		}
 
