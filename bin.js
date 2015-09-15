@@ -12,7 +12,7 @@ var readline = require("readline");
 var binName = typeof pkg.bin == "object" ? Object.keys(pkg.bin)[0] : pkg.name;
 
 var client;
-var minExpires = 5000;
+var defaultMinExpires = 4500;
 var unlockTime = 300;
 
 function rpc() {
@@ -298,7 +298,15 @@ var commands = {
 		});
 	},
 
-	"update-expiring": function () {
+	"update-expiring": function (minExpires) {
+		if (!minExpires)
+			minExpires = defaultMinExpires;
+
+		if (isNaN(minExpires)) {
+			console.error("Usage: " + binName + " update-expiring [<depth>]");
+			process.exit(1);
+		}
+
 		rpc("name_list", function (err, result) {
 			if (err) throw err;
 			var names = result.filter(function (data) {
@@ -340,7 +348,7 @@ if (!fn) {
 		"    info <name>",
 		"    cat <name>",
 		"    edit <name>",
-		"    update-expiring",
+		"    update-expiring [<depth>]",
 	].join("\n"));
 	process.exit(process.argv.length == 2 ? 0 : 1);
 }

@@ -37,15 +37,17 @@ the value is JSON, it is pretty-printed for the editor and then printed
 compactly for issuing the update. If the JSON data saved is invalid, you are
 prompted to edit it again.
 
-#### `update-expiring`
+#### `update-expiring [<depth>]`
 
-Update all names that are nearing expiration.
+Update all names that are nearing expiration, i.e. are within `<depth>` blocks
+of expiring. If unspecified, depth defaults to 4500, which is about a month.
 
 ## Todo
 
 - Support registering new names
 - Support transferring names
 - Add bash/zsh completions
+- Allow editing multiple names at once
 
 ## License
 
