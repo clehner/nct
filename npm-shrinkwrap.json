@@ -1,0 +1,32 @@
+{
+  "name": "namecointool",
+  "version": "1.0.4",
+  "dependencies": {
+    "mktemp": {
+      "version": "0.4.0",
+      "from": "mktemp@^0.4.0",
+      "resolved": "https://registry.npmjs.org/mktemp/-/mktemp-0.4.0.tgz"
+    },
+    "namecoin-rpc": {
+      "version": "2.1.2",
+      "from": "namecoin-rpc@^2.1.2",
+      "resolved": "https://registry.npmjs.org/namecoin-rpc/-/namecoin-rpc-2.1.2.tgz"
+    },
+    "node-ini": {
+      "version": "1.0.0",
+      "from": "node-ini@^1.0.0",
+      "resolved": "https://registry.npmjs.org/node-ini/-/node-ini-1.0.0.tgz"
+    },
+    "pinentry": {
+      "version": "0.0.1",
+      "from": "pinentry@^0.0.1",
+      "dependencies": {
+        "linerstream": {
+          "version": "0.1.4",
+          "from": "linerstream@^0.1.4",
+          "resolved": "https://registry.npmjs.org/linerstream/-/linerstream-0.1.4.tgz"
+        }
+      }
+    }
+  }
+}
