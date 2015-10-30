@@ -14,6 +14,7 @@ var binName = typeof pkg.bin == "object" ? Object.keys(pkg.bin)[0] : pkg.name;
 var client;
 var defaultMinExpires = 4500;
 var unlockTime = 300;
+var maxLength = 519;
 
 function rpc() {
 	var args = [].slice.call(arguments);
@@ -80,6 +81,10 @@ function unlockWallet(cb, errorMsg) {
 }
 
 function saveName(name, data, cb) {
+	if (data.length > maxLength) {
+		cb({err: "too long", length: data.length}, null);
+		return;
+	}
 	rpc("name_update", name, data, function (err, result) {
 		if (err) {
 			if (err.code == -13) {
@@ -88,10 +93,10 @@ function saveName(name, data, cb) {
 					saveName(name, data, cb);
 				});
 			} else {
-				cb(null, result);
+				cb(err, result);
 			}
 		} else {
-			cb(err, null);
+			cb(null, result);
 		}
 	});
 }
@@ -141,16 +146,31 @@ function editName(name, path, oldData, asJSON, cb) {
 
 	function next() {
 		if (asJSON) {
-			saveJSON(name, path, data, cb);
+			saveJSON(name, path, data, next2);
 		} else if (data[0] == "{" || data[1] == "[") {
 			promptYesNo("Is this JSON?", function (yes) {
 				if (yes)
-					saveJSON(name, path, data, cb);
+					saveJSON(name, path, data, next2);
 				else
-					saveName(name, data, cb);
+					saveName(name, data, next2);
 			});
 		} else {
-			saveName(name, data, cb);
+			saveName(name, data, next2);
+		}
+	}
+
+	function next2(err, result) {
+		if (err && err.err == "too long") {
+			console.log("Value was too large. (" +
+				err.length + "/" + maxLength + " bytes)");
+			promptYesNo("Re-edit?", function (yes) {
+				if (yes)
+					editName(name, path, data, asJSON, cb);
+				else
+					cb("cancel", null);
+			});
+		} else {
+			cb(err, result);
 		}
 	}
 }
