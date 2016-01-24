@@ -255,6 +255,10 @@ function updateNames(names, cb) {
 }
 
 var commands = {
+	ls: function () {
+		commands.list()
+	},
+
 	list: function() {
 		rpc("name_list", function (err, result) {
 			if (err) throw err;
