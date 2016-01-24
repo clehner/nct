@@ -3,6 +3,7 @@
   "version": "1.0.5",
   "description": "command-line Namecoin name manager",
   "bin": {"nct": "bin.js"},
+  "preferGlobal": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/clehner/nct"
@@ -10,7 +11,7 @@
   "keywords": [
     "namecoin"
   ],
-  "author": "Charles Lehner <cel@celehner.com> (http://celehner.com/)",
+  "author": "Charles Lehner (http://celehner.com/)",
   "license": "Fair",
   "bugs": {
     "url": "https://github.com/clehner/nct/issues"
@@ -20,5 +21,11 @@
     "namecoin-rpc": "^2.1.2",
     "node-ini": "^1.0.0",
     "pinentry": "^0.0.1"
-  }
+  },
+  "files": [
+    "bin.js",
+    "README.md",
+    "npm-shrinkwrap.json",
+    "package.json"
+  ]
 }
