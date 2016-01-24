@@ -1,6 +1,6 @@
 {
   "name": "namecointool",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "command-line Namecoin name manager",
   "bin": {"nct": "bin.js"},
   "preferGlobal": true,
